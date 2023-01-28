@@ -25,9 +25,9 @@ class ProductManager {
   }
 
   getProductById(prodId) {
-    return (this.products.includes(prodId))
-    ? console.log(`product with id: ${prodId} not exists`)
-    : this.products.find((p) => p.id === prodId)
+   return (this.products.some(el => el.id === prodId)) 
+    ? this.products.find((p) => p.id === prodId)
+    : console.log(`product with id: ${prodId} not found`)
   }
 
   getAllProducts() {
