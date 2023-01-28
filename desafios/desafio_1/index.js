@@ -6,12 +6,7 @@ class ProductManager {
 
   addProduct(prod) {
     if (
-      prod.code == undefined ||
-      prod.title == undefined ||
-      prod.description == undefined ||
-      prod.price == undefined ||
-      prod.thumbnail == undefined ||
-      prod.stock == undefined
+      !prod.code || !prod.title || !prod.description || !prod.price || !prod.thumbnail || !prod.stock
     ) {
       console.log("some product properties are empty, check it");
     } else if (this.products.find(p => p.code === prod.code)) {
@@ -25,9 +20,9 @@ class ProductManager {
   }
 
   getProductById(prodId) {
-   return (this.products.some(el => el.id === prodId)) 
-    ? this.products.find((p) => p.id === prodId)
-    : console.log(`product with id: ${prodId} not found`)
+   return (this.products.find(p => p.id === prodId)) 
+   ? this.products.find((p) => p.id === prodId)
+   : console.log(`product with id: ${prodId} not found`)
   }
 
   getAllProducts() {
