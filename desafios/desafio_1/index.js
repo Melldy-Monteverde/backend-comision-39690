@@ -35,31 +35,4 @@ class ProductManager {
   }
 }
 
-const pManager = new ProductManager();
-
-let p1 = {
-  code: "p-1",
-  title: "product 1",
-  description: "description 1",
-  stock: 20,
-  price: 10,
-  thumbnail: "thumbnail path",
-};
-
-let p2 = {
-  code: "p-1",
-  title: "product 2",
-  description: "description 2",
-  stock: 20,
-  price: 50,
-  thumbnail: "thumbnail path",
-};
-
-let p3 = {
-  code: "p-3",
-  title: "product 3",
-  description: "description 3",
-  stock: 20,
-  price: 40,
-  thumbnail: "thumbnail path",
-};
+const prodManager = new ProductManager();
