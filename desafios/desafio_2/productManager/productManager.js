@@ -3,19 +3,49 @@ const fs = require('fs/promises');
 class ProductManager {
   constructor(path) {
     this.path = path;
+    this.products = []
   }
 
   async idGnerator(prodList) {
     try {
-      if (prodList.length === 0) return 1;
-      return prodList[prodList.length - 1].id + 1;
+      return (prodList.length === 0)
+        ? 1
+        : prodList[prodList.length - 1].id + 1;
     } catch (error) {
       console.log(error)
     }
   }
 
+  async getAllProd() {
+    try {
+      const prodListDB = await fs.readFile(this.path, 'utf-8');
+      console.table(prodListDB);
+      return prodListDB.length === 0
+        ? console.log('there are not products to display')
+        : JSON.parse(prodListDB)
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getProdById(id) {
+    try {
+      const prodListDB = await this.getAllProd()
+      const prodFound = prodListDB.find(p => p.id === id)
+      return prodFound
+        ? prodFound
+        : console.log(`product with id: ${id} not found`);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async addProd(prod) {
     try {
+      const prodListDB = await this.getAllProd()
+      const newId = await this.idGnerator(prodListDB)
       if (
         !prod.code ||
         !prod.title ||
@@ -26,38 +56,10 @@ class ProductManager {
       ) {
         throw new Error('some product properties are empty')
       } else {
-        const dbProd = await this.getAllProd();
-
-        const newId = await this.idGnerator(dbProd.products);
-        const newProd = { id: newId, ...prod };
-        dbProd.products.push(newProd)
-
-        await fs.writeFile(this.path, JSON.stringify(dbProd));
-        return newProd
+        prodListDB.push({ id: newId, ...prod })
+        await fs.writeFile(this.path, JSON.stringify(prodListDB))
+        return `product with id: ${newId} add successfully`
       }
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async getAllProd() {
-    try {
-      const prodListDB = await fs.readFile(this.path, 'utf-8');
-      console.log(prodListDB);
-      return JSON.parse(prodListDB);
-    } catch (error) {
-      console.log(error);
-      throw new Error('there are not products');
-    }
-  }
-
-  async getProdById(id) {
-    try {
-      const prodListDB = await this.getAllProd()
-      const prodFound = prodListDB.find(p => p.id === id)
-      console.log(prodFound)
-      return prodFound ? prodFound : console.log(`product with id: ${id} not found`);
 
     } catch (error) {
       console.log(error);
@@ -68,11 +70,11 @@ class ProductManager {
     try {
       const prodListDB = await this.getAllProd()
       const prodId = await this.getProdById(id)
-
       let index = prodListDB.findIndex(p => p.id === id)
-      prodListDB[index] = { ...prodId, ...data };
+      prodListDB[index] = { ...prodId, ...data }
       await fs.writeFile(this.path, JSON.stringify(prodListDB))
-      return console.log(prodListDB)
+      return console.table(prodListDB)
+
     } catch (error) {
       console.log(error)
     }
@@ -81,14 +83,15 @@ class ProductManager {
   async delProdById(id) {
     try {
       const prodListDB = await this.getAllProd()
-      const prodFiltered = prodListDB.filter(p => p.id !== id)
-      console.log(prodFiltered)
-      return console.log(`product with id: ${id} removed`)
+      const prodFiltered = await prodListDB.filter(p => p.id !== id)
+      await fs.writeFile(this.path, JSON.stringify(prodFiltered))
+      console.table(prodFiltered)
+      return `product with id: ${id} removed successfully`
+
     } catch (error) {
       console.log(error)
     }
   }
-
 }
 
 module.exports = ProductManager

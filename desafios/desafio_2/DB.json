@@ -1,1 +1,11 @@
-{"products":[{"id":1,"title":"title 1","description":"description 1","price":200,"thumbnail":"img path","code":"code-1","stock":25}]}
+[
+  {
+    "id": 1,
+    "title": "title 1",
+    "description": "description 1",
+    "price": 200,
+    "thumbnail": "img path",
+    "code": "code-1",
+    "stock": 25
+  }
+]
