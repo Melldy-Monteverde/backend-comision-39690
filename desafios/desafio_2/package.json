@@ -11,8 +11,5 @@
     "nodejs"
   ],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "joi": "^17.7.0"
-  }
+  "license": "ISC"
 }
