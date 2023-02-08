@@ -19,7 +19,7 @@ class ProductManager {
   async getAllProd() {
     try {
       const prodListDB = await fs.readFile(this.path, 'utf-8');
-      console.table(prodListDB);
+      // console.table(prodListDB);
       return prodListDB.length === 0
         ? console.log('there are not products to display')
         : JSON.parse(prodListDB)
@@ -32,7 +32,7 @@ class ProductManager {
   async getProdById(id) {
     try {
       const prodListDB = await this.getAllProd()
-      const prodFound = prodListDB.find(p => p.id === id)
+      const prodFound = prodListDB.products.find(p => p.id === id)
       return prodFound
         ? prodFound
         : console.log(`product with id: ${id} not found`);
@@ -45,7 +45,7 @@ class ProductManager {
   async addProd(prod) {
     try {
       const prodListDB = await this.getAllProd()
-      const newId = await this.idGnerator(prodListDB)
+      const newId = await this.idGnerator(prodListDB.products)
       if (
         !prod.code ||
         !prod.title ||
@@ -56,7 +56,7 @@ class ProductManager {
       ) {
         throw new Error('some product properties are empty')
       } else {
-        prodListDB.push({ id: newId, ...prod })
+        prodListDB.products.push({ id: newId, ...prod })
         await fs.writeFile(this.path, JSON.stringify(prodListDB))
         return `product with id: ${newId} add successfully`
       }
@@ -70,10 +70,10 @@ class ProductManager {
     try {
       const prodListDB = await this.getAllProd()
       const prodId = await this.getProdById(id)
-      let index = prodListDB.findIndex(p => p.id === id)
-      prodListDB[index] = { ...prodId, ...data }
+      let index = prodListDB.products.findIndex(p => p.id === id)
+      prodListDB.products[index] = { ...prodId, ...data }
       await fs.writeFile(this.path, JSON.stringify(prodListDB))
-      return console.table(prodListDB)
+      return console.table(prodListDB.products)
 
     } catch (error) {
       console.log(error)
@@ -83,9 +83,9 @@ class ProductManager {
   async delProdById(id) {
     try {
       const prodListDB = await this.getAllProd()
-      const prodFiltered = await prodListDB.filter(p => p.id !== id)
+      const prodFiltered = await prodListDB.products.filter(p => p.id !== id)
       await fs.writeFile(this.path, JSON.stringify(prodFiltered))
-      console.table(prodFiltered)
+      // console.table(prodFiltered)
       return `product with id: ${id} removed successfully`
 
     } catch (error) {
