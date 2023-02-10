@@ -8,7 +8,7 @@ const prodManager = new ProductManager(dbPath)
 const getAllProd = async () => {
   try {
     const prodListDB = await prodManager.getAllProd(dbPath);
-    console.table(prodListDB.products);
+    console.table(prodListDB);
   } catch (error) {
     console.log(error);
   }
@@ -31,28 +31,34 @@ const delProdById = async (id) => {
   const prodListDB = await prodManager.delProdById(id);
 };
 
-// Bringing existing data
-// getAllProd();
+const main = async () => {
 
-// Creating a new element
+  // Bringing existing data
+  await getAllProd();
 
-// addProd({
-//   title: "title 13",
-//   description: "description 13",
-//   price: 200,
-//   thumbnail: "img path",
-//   code: "code-13",
-//   stock: 25,
-// });
+  // Creating a new element
 
-getAllProd();
+  // await addProd({
+  //   title: "title 15",
+  //   description: "description 15",
+  //   price: 200,
+  //   thumbnail: "img path",
+  //   code: "code-15",
+  //   stock: 25,
+  // });
 
-// getProdById(1);
-// getProdById(2);
+  // await getAllProd();
 
-// updProd(13, {
-//   title: "Updated product title",
-//   description: "Updated description",
-// });
+  await getProdById(1);
+  // await getProdById(2);
 
-// delProdById(1);
+  // await updProd(13, {
+  //   title: "Updated product title to 50",
+  //   description: "Updated description to 50",
+  // });
+
+  // await getAllProd();
+  // await delProdById(14);
+}
+
+main()
