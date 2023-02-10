@@ -32,7 +32,7 @@ class ProductManager {
   async getProdById(id) {
     try {
       const prodListDB = await this.getAllProd()
-      const prodFound = prodListDB.products.find(p => p.id === id)
+      const prodFound = prodListDB.find(p => p.id === id)
       return prodFound
         ? prodFound
         : console.log(`product with id: ${id} not found`);
@@ -45,7 +45,7 @@ class ProductManager {
   async addProd(prod) {
     try {
       const prodListDB = await this.getAllProd()
-      const newId = await this.idGnerator(prodListDB.products)
+      const newId = await this.idGnerator(prodListDB)
       if (
         !prod.code ||
         !prod.title ||
@@ -56,8 +56,8 @@ class ProductManager {
       ) {
         throw new Error('some product properties are empty')
       } else {
-        prodListDB.products.push({ id: newId, ...prod })
-        await fs.writeFile(this.path, JSON.stringify(prodListDB))
+        prodListDB.push({ id: newId, ...prod })
+        await fs.writeFile(this.path, JSON.stringify(prodListDB, null, 2))
         return `product with id: ${newId} add successfully`
       }
 
@@ -71,8 +71,8 @@ class ProductManager {
       const prodListDB = await this.getAllProd()
       const prodId = await this.getProdById(id)
       let index = prodListDB.products.findIndex(p => p.id === id)
-      prodListDB.products[index] = { ...prodId, ...data }
-      await fs.writeFile(this.path, JSON.stringify(prodListDB))
+      prodListDB[index] = { ...prodId, ...data }
+      await fs.writeFile(this.path, JSON.stringify(prodListDB, null, 2))
       return console.table(prodListDB)
 
     } catch (error) {
@@ -83,8 +83,8 @@ class ProductManager {
   async delProdById(id) {
     try {
       const prodListDB = await this.getAllProd()
-      const prodFiltered = await prodListDB.products.filter(p => p.id !== id)
-      await fs.writeFile(this.path, JSON.stringify(prodFiltered))
+      const prodFiltered = await prodListDB.filter(p => p.id !== id)
+      await fs.writeFile(this.path, JSON.stringify(prodFiltered, null, 2))
       // console.table(prodFiltered)
       return `product with id: ${id} removed successfully`
 

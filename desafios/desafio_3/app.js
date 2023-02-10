@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 app.get('/products', async (req, res) => {
   const limit = Number(req.query.limit)
   const products = await prodManager.getAllProd()
-  const limitedProducts = products.products.slice(0, limit)
+  const limitedProducts = products.slice(0, limit)
 
   return limit
     ? res.status(200).json({ products: limitedProducts })
