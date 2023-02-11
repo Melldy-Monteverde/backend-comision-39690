@@ -34,22 +34,22 @@ const delProdById = async (id) => {
 const main = async () => {
 
   // Bringing existing data
-  await getAllProd();
+  // await getAllProd();
 
   // Creating a new element
 
-  // await addProd({
-  //   title: "title 15",
-  //   description: "description 15",
-  //   price: 200,
-  //   thumbnail: "img path",
-  //   code: "code-15",
-  //   stock: 25,
-  // });
+  await addProd({
+    title: "title 14",
+    description: "description 14",
+    price: 200,
+    thumbnail: "img path",
+    code: "code-2",
+    stock: 25,
+  });
 
-  // await getAllProd();
+  await getAllProd();
 
-  await getProdById(1);
+  // await getProdById(1);
   // await getProdById(2);
 
   // await updProd(13, {

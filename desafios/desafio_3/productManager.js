@@ -55,6 +55,8 @@ class ProductManager {
         !prod.stock
       ) {
         throw new Error('some product properties are empty')
+      } else if (prodListDB.some(p => p.code === prod.code)) {
+        console.log(`product with code: ${prod.code} already exists`)
       } else {
         prodListDB.push({ id: newId, ...prod })
         await fs.writeFile(this.path, JSON.stringify(prodListDB, null, 2))
