@@ -19,7 +19,7 @@ class ProductManager {
   async getAllProd() {
     try {
       const prodListDB = await fs.readFile(this.path, 'utf-8');
-      // console.table(prodListDB);
+      console.table(prodListDB);
       return prodListDB.length === 0
         ? console.log('there are not products to display')
         : JSON.parse(prodListDB)
@@ -55,9 +55,11 @@ class ProductManager {
         !prod.stock
       ) {
         throw new Error('some product properties are empty')
+      } else if (prodListDB.some(p => p.code === prod.code)) {
+        console.log(`product with code: ${prod.code} already exists`);
       } else {
         prodListDB.push({ id: newId, ...prod })
-        await fs.writeFile(this.path, JSON.stringify(prodListDB, null, 2))
+        await fs.writeFile(this.path, JSON.stringify(prodListDB))
         return `product with id: ${newId} add successfully`
       }
 
@@ -72,8 +74,8 @@ class ProductManager {
       const prodId = await this.getProdById(id)
       let index = prodListDB.findIndex(p => p.id === id)
       prodListDB[index] = { ...prodId, ...data }
-      await fs.writeFile(this.path, JSON.stringify(prodListDB, null, 2))
-      return console.table(prodListDB.products)
+      await fs.writeFile(this.path, JSON.stringify(prodListDB))
+      return console.table(prodListDB)
 
     } catch (error) {
       console.log(error)
@@ -84,9 +86,10 @@ class ProductManager {
     try {
       const prodListDB = await this.getAllProd()
       const prodFiltered = await prodListDB.filter(p => p.id !== id)
-      await fs.writeFile(this.path, JSON.stringify(prodFiltered, null, 2))
+      await fs.writeFile(this.path, JSON.stringify(prodFiltered))
       console.table(prodFiltered)
       return `product with id: ${id} removed successfully`
+
     } catch (error) {
       console.log(error)
     }
